@@ -25,7 +25,8 @@
 		
 		// sql문 만들기
 		String sql = "SELECT * FROM members WHERE memberid = '"+mid+"'";
-		
+		// String sql = "SELECT * FROM members";
+				
 		Connection conn = null; // 커넥션 인터페이스 선언 후 null 로 초기값 설정
 		Statement stmt = null; // sql 문 관리해주는 객체를 선언해주는 인터페이스로 stmt 선언
 		ResultSet rs = null; // select문 실행 시 db에서 반환해주는 레코드 결과를 받아주는 자료 타입 rs 선언
@@ -43,7 +44,7 @@
 			
 			if (rs.next()) { // 참이면 레코드가 한개 이상 존재 -> 아이디가 존재
 				
-				while (rs.next()) { 				
+				do { 				
 					String sid = rs.getString("memberid"); // 뽑으려는 레코드 필드 타입과 같은 타입으로 지정
 					String spw = rs.getString("memberpw");
 					String sname = rs.getString("membername");
@@ -51,9 +52,8 @@
 					String sdate = rs.getString("memberdate");
 					
 					out.println("*** 조회된 회원 정보 *** <br> ");
-					out.println(sid + "/" + spw + "/" + sname + "/" + semail + "/" + sdate);
-				} 
-				
+					out.println(sid + "/" + spw + "/" + sname + "/" + semail + "/" + sdate + "<br>");
+				} while (rs.next());
 			} else { // 거짓 -> 레코드가 없음 (0개)
 				out.println("존재하지 않는 회원입니다.");
 			}
