@@ -1,4 +1,4 @@
-<%@page import="com.khoyuna0.member.MemberDto"%>
+<%@page import="com.khyuna0.member.MemberDto"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="java.sql.ResultSet"%>

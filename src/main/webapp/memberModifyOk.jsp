@@ -1,4 +1,5 @@
-<%@page import="com.khoyuna0.member.MemberDto"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="com.khyuna0.member.MemberDto"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.Statement"%>
 <%@page import="java.sql.DriverManager"%>
@@ -28,18 +29,23 @@
 		String password = "12345";
 		
 		// sql문 만들기
-		String sql = " UPDATE members SET memberpw = '"+ mpw +"', membername = '"+ mname +"', memberemail = '"+ memail +"' WHERE memberid = '"+ mid +"'";
+		String sql = " UPDATE members SET memberpw = ?, membername = ?, memberemail = ? WHERE memberid = ? ";
 		
 		Connection conn = null; // 커넥션 인터페이스 선언 후 null 로 초기값 설정
-		Statement stmt = null; // sql 문 관리해주는 객체를 선언해주는 인터페이스로 stmt 선언
+		PreparedStatement pstmt = null; // sql 문 관리해주는 객체를 선언해주는 인터페이스로 stmt 선언
 		
 		try {
 			Class.forName(drivername); // MYSQL 드라이버 클래스 불러오기
 			conn = DriverManager.getConnection(url, username, password);
 			// 커넥션이 메모리에 생성됨(DB와의 연결 커넥션 conn 생성)
-			stmt = conn.createStatement(); // stmt 객체 생성
+			pstmt = conn.prepareStatement(sql); // stmt 객체 생성
 			
-			int sqlResult = stmt.executeUpdate(sql); // sql문을 DB에서 실행
+			pstmt.setString(1, mpw);
+			pstmt.setString(2, mname);
+			pstmt.setString(3, memail);
+			pstmt.setString(4, mid);
+			
+			int sqlResult = pstmt.executeUpdate(); // sql문을 DB에서 실행
 			//System.out.println("sqlResult 값 : " + sqlResult);	
 			
 		} catch (Exception e) {
@@ -47,8 +53,8 @@
 			e.printStackTrace();
 		} finally { // 에러의 발생여부와 상관 없이 Connection 닫기 실행
 			try {
-					if(stmt != null ) { // stmt가 null 이 아니면 닫기. conn보다 먼저 닫아야 함!
-						stmt.close();	
+					if(pstmt != null ) { // stmt가 null 이 아니면 닫기. conn보다 먼저 닫아야 함!
+						pstmt.close();	
 					}
 					
 					if(conn != null ) { // Connection이 null이 아닐 때만 닫기

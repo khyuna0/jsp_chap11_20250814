@@ -1,4 +1,4 @@
-<%@page import="com.khoyuna0.member.BoardDto"%>
+<%@page import="com.khyuna0.member.BoardDto"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>

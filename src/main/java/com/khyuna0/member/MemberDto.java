@@ -1,4 +1,4 @@
-package com.khoyuna0.member;
+package com.khyuna0.member;
 
 public class MemberDto {
 	private String memberid; // 회원아이디

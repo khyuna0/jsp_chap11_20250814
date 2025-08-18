@@ -1,3 +1,4 @@
+<%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.Statement"%>
 <%@page import="java.sql.DriverManager"%>
@@ -24,23 +25,23 @@
 		String password = "12345";
 		
 		// sql문 만들기
-		String sql = "SELECT * FROM members WHERE memberid = '"+mid+"'";
+		String sql = "SELECT * FROM members WHERE memberid = ?";
 		// String sql = "SELECT * FROM members";
 				
 		Connection conn = null; // 커넥션 인터페이스 선언 후 null 로 초기값 설정
-		Statement stmt = null; // sql 문 관리해주는 객체를 선언해주는 인터페이스로 stmt 선언
+		PreparedStatement pstmt = null; // sql 문 관리해주는 객체를 선언해주는 인터페이스로 stmt 선언
 		ResultSet rs = null; // select문 실행 시 db에서 반환해주는 레코드 결과를 받아주는 자료 타입 rs 선언
+		
 		
 		try {
 			Class.forName(drivername); // MYSQL 드라이버 클래스 불러오기
 			conn = DriverManager.getConnection(url, username, password);
 			// 커넥션이 메모리에 생성됨(DB와의 연결 커넥션 conn 생성)
-			stmt = conn.createStatement(); // stmt 객체 생성
+			//stmt = conn.createStatement(); // stmt 객체 생성
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery(); 
 			
-			//int sqlResult = stmt.executeUpdate(sql); // sql문을 DB에서 실행
-			rs = stmt.executeQuery(sql); 
-			// select 문 실행하면 결과가 DB로부터 반환 -> 결과 (레코드 (행))를 받아주는 resultset 타입 객체로 받아야 함	 
-			// String sid = null;
+			pstmt.setString(1, mid);
 			
 			if (rs.next()) { // 참이면 레코드가 한개 이상 존재 -> 아이디가 존재
 				
@@ -57,10 +58,6 @@
 			} else { // 거짓 -> 레코드가 없음 (0개)
 				out.println("존재하지 않는 회원입니다.");
 			}
-				
-//				if (sid == null ) {
-//					out.println("존재하지 않는 회원입니다.");
-//				}
 					
 				
 			
@@ -73,8 +70,8 @@
 						rs.close();
 					}
 					
-					if(stmt != null ) { // stmt가 null 이 아니면 닫기. conn보다 먼저 닫아야 함!
-						stmt.close();	
+					if(pstmt != null ) { // stmt가 null 이 아니면 닫기. conn보다 먼저 닫아야 함!
+						pstmt.close();	
 					}
 					
 					if(conn != null ) { // Connection이 null이 아닐 때만 닫기

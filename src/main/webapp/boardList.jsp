@@ -1,5 +1,5 @@
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.khoyuna0.member.BoardDto"%>
+<%@page import="com.khyuna0.member.BoardDto"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.util.List"%>
 <%@page import="java.sql.Statement"%>

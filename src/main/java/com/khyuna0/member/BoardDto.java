@@ -1,4 +1,4 @@
-package com.khoyuna0.member;
+package com.khyuna0.member;
 
 public class BoardDto {
 	public int bnum;
