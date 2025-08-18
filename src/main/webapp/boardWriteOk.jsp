@@ -14,9 +14,9 @@
 		// DB에 삽입할 데이터 준비 완료
 		request.setCharacterEncoding("utf-8");
 		
-		String btitle = request.getParameter("btitle"); // 아이디
-		String bcontents = request.getParameter("bcontents"); // 비밀번호
-		String memberid = request.getParameter("memberid"); // 이름
+		String btitle = request.getParameter("btitle"); 
+		String bcontents = request.getParameter("bcontents"); 
+		String memberid = request.getParameter("memberid"); 
 		// DB 커넥션 준비
 		String drivername = "com.mysql.jdbc.Driver"; // mysql jdbc 드라이버 이름
 		String url = "jdbc:mysql://localhost:3306/jspdb"; // MYSQL이 설치된 서버의 주소(ip)와 연결할 DB(스키마)이름
@@ -26,6 +26,8 @@
 		// sql문 만들기
 		String sql = "INSERT INTO board(btitle, bcontents, memberid) VALUES ('"+ btitle +"','"+ bcontents +"','"+ memberid +"')";
 		
+		int result = 0;
+		
 		Connection conn = null; // 커넥션 인터페이스 선언 후 null 로 초기값 설정
 		Statement stmt = null; // sql 문 관리해주는 객체를 선언해주는 인터페이스로 stmt 선언
 		
@@ -34,12 +36,8 @@
 			conn = DriverManager.getConnection(url, username, password);
 			// 커넥션이 메모리에 생성됨(DB와의 연결 커넥션 conn 생성)
 			stmt = conn.createStatement(); // stmt 객체 생성
-			
-			int sqlResult = stmt.executeUpdate(sql); // sql문을 DB에서 실행
-			// 성공하면 >1이 반환<, 실패하면 >1이 아닌 다른 값<이 반환됨 if-else로 성공 여부 판단 가능
-			// 1 = 한 줄. db의 몇 행이 영향 받았나...
-			System.out.println("sqlResult 값 : " + sqlResult);	
-			
+			result = stmt.executeUpdate(sql);		
+
 		} catch (Exception e) {
 			out.println ("DB에러 발생. 회원가입 실패");
 			e.printStackTrace();
@@ -57,7 +55,11 @@
 			}
 		}
 		
-		 response.sendRedirect("boardR.jsp");
+		if(result == 1 ) { 
+			RequestDispatcher dispatcher = request.getRequestDispatcher("boardListOk.jsp");
+			dispatcher.forward(request, response);
+		}
+		 
 	%>
 		
 	
